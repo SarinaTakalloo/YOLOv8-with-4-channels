@@ -156,11 +156,23 @@ class BaseDataset(Dataset):
                 except Exception as e:
                     LOGGER.warning(f"{self.prefix}WARNING ⚠️ Removing corrupt *.npy image file {fn} due to: {e}")
                     Path(fn).unlink(missing_ok=True)
-                    im = cv2.imread(f)  # BGR
+                    im = cv2.imread(f)  # BGR  
             else:  # read image
                 im = cv2.imread(f)  # BGR
             if im is None:
                 raise FileNotFoundError(f"Image Not Found {f}")
+
+
+        # "I should change this part in order to use numpy files"    
+        # fn = self.npy_files[i]  # Assuming self.npy_files contains the paths to numpy files
+        # try:
+        #     im = np.load(fn)
+        # except Exception as e:
+        #     LOGGER.warning(f"{self.prefix}WARNING ⚠️ Unable to load numpy file {fn} due to: {e}")
+        #     im = None
+
+        # if im is None:
+        #     raise FileNotFoundError(f"Image Not Found {fn}")
 
             h0, w0 = im.shape[:2]  # orig hw
             if rect_mode:  # resize long side to imgsz while maintaining aspect ratio
@@ -198,7 +210,9 @@ class BaseDataset(Dataset):
                     b += self.ims[i].nbytes
                 pbar.desc = f"{self.prefix}Caching images ({b / gb:.1f}GB {cache})"
             pbar.close()
-
+    
+    
+    # remove this part for using numpy arrays:
     def cache_images_to_disk(self, i):
         """Saves an image as an *.npy file for faster loading."""
         f = self.npy_files[i]
