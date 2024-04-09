@@ -454,7 +454,7 @@ class ClassificationDataset:
                 np.save(fn.as_posix(), cv2.imread(f, cv2.IMREAD_UNCHANGED), allow_pickle=False)
             im = np.load(fn)
         else:  # read image
-            im = cv2.imread(f, cv2.IMREAD_UNCHANGED)  # BGR
+            im = cv2.imread(f, cv2.IMREAD_UNCHANGED)  # BGR (but I change to keep the format)
         # Convert NumPy array to PIL image
         # im = Image.fromarray(cv2.cvtColor(im, cv2.COLOR_BGR2RGB))
         im = Image.fromarray(cv2.cvtColor(im, cv2.COLOR_BGRA2RGBA)) # this is based on pdf, I probably should do this:im=im[:, :, [0, 1, 2, 3]]

@@ -360,7 +360,7 @@ class LoadImagesAndVideos:
                         self._new_video(self.files[self.count])
             else:
                 self.mode = "image"
-                im0 = cv2.imread(path)  # BGR
+                im0 = cv2.imread(path, cv2.IMREAD_UNCHANGED)  # BGR (I changed to keep the format)
                 if im0 is None:
                     raise FileNotFoundError(f"Image Not Found {path}")
                 paths.append(path)
@@ -421,6 +421,12 @@ class LoadPilAndNumpy:
             if im.mode != "RGB":
                 im = im.convert("RGB")
             im = np.asarray(im)[:, :, ::-1]
+            # if im.mode != "RGBA": the pdf didn't change this part, i put the code in case i had an error
+            #     im = im.convert("RGBA")
+            # im = np.asarray(im)
+            # # Extracting channels R, G, NIR, RE
+            # im_channels = [im[:, :, i] for i in range(im.shape[2])]
+            # im = np.stack(im_channels, axis=-1)
             im = np.ascontiguousarray(im)  # contiguous
         return im
 
