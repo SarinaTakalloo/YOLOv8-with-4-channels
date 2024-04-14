@@ -810,11 +810,15 @@ def plot_images(
         images *= 255  # de-normalise (optional)
 
     # Build Image
-    mosaic = np.full((int(ns * h), int(ns * w), 3), 255, dtype=np.uint8)  # init
+    # mosaic = np.full((int(ns * h), int(ns * w), 3), 255, dtype=np.uint8)  # init
+    mosaic = np.full((int(ns * h), int(ns * w), 4), 255, dtype=np.uint8)  # assumabely 4 (3) is the number of channels. changed by me, not the pdf
+
     for i in range(bs):
         x, y = int(w * (i // ns)), int(h * (i % ns))  # block origin
-        mosaic[y : y + h, x : x + w, :] = images[i].transpose(1, 2, 0)
-
+        mosaic[y : y + h, x : x + w, :] = images[i].transpose(1, 2, 0)  # for now I will try to not change it
+        # (R, G, RE, NIR) = cv2.split(images[i])
+        # merged = cv2.merge([R, G, RE])
+        # mosaic[y:y + h, x:x + w, :] = merged   # I didn't know how to change this properly. we will have this for now.
     # Resize (optional)
     scale = max_size / ns / max(h, w)
     if scale < 1:

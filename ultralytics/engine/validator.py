@@ -137,7 +137,9 @@ class BaseValidator:
                 self.args.batch = model.batch_size
             elif not pt and not jit:
                 self.args.batch = 1  # export.py models default to batch-size 1
-                LOGGER.info(f"Forcing batch=1 square inference (1,3,{imgsz},{imgsz}) for non-PyTorch models")
+                # LOGGER.info(f"Forcing batch=1 square inference (1,3,{imgsz},{imgsz}) for non-PyTorch models")
+                LOGGER.info(f"Forcing batch=1 square inference (1,4,{imgsz},{imgsz}) for non-PyTorch models") #changed by me not pdf
+
 
             if str(self.args.data).split(".")[-1] in {"yaml", "yml"}:
                 self.data = check_det_dataset(self.args.data)
@@ -154,7 +156,9 @@ class BaseValidator:
             self.dataloader = self.dataloader or self.get_dataloader(self.data.get(self.args.split), self.args.batch)
 
             model.eval()
-            model.warmup(imgsz=(1 if pt else self.args.batch, 3, imgsz, imgsz))  # warmup
+            # model.warmup(imgsz=(1 if pt else self.args.batch, 3, imgsz, imgsz))  # warmup
+            model.warmup(imgsz=(1 if pt else self.args.batch, 4, imgsz, imgsz))  # warmup changed
+
 
         self.run_callbacks("on_val_start")
         dt = (
